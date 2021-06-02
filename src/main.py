@@ -26,7 +26,7 @@ from random import getrandbits
 from ipaddress import IPv4Network, IPv4Address
 
 # TODO: import xml element tree to parser file
-import xml.etree.ElementTree as ET
+from defusedxml.ElementTree import parse
 
 
 # TODO: Classe para fazer o parser geral
@@ -139,7 +139,7 @@ class Nessus():
     def parser(self):
         hosts = []
         count = 0
-        tree = ET.parse(self.file)
+        tree = parse(self.file)
 
         for host in tree.findall('Report/ReportHost'):
             try:
