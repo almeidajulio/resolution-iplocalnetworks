@@ -16,7 +16,7 @@
 </p>
 
 
-###### Directory Structure 
+#### Directory Structure 
 <br>
 
     .
@@ -27,12 +27,12 @@
     │   ├── hostnames           # Folder with control file
     │   ├── logging             # Log Folder
     │   │   └── logging.log     # File logging application
-    │   └── ...
+    │   └── config.json         # Configuration file (network escope)
     └── ...
 
 <br>
 
-## :dart: About ##
+### :dart: About ##
 
 Keeping a fixed private IP,  controlling IPs generated in DHCP and internal network VPN in nessus scanner files
 
@@ -42,18 +42,20 @@ Keeping a fixed private IP,  controlling IPs generated in DHCP and internal netw
 :heavy_check_mark: Feature 2;\
 :heavy_check_mark: Feature 3; -->
 
-## :rocket: Technologies ##
+### :rocket: Technologies ##
 
 The following tools were used in this project:
 
 - [Python](https://www.python.org/)
 
 
-## :white_check_mark: Requirements ##
+### :white_check_mark: Requirements ##
 
-Before starting :checkered_flag:, you need to have [Python](https://www.python.org/) Libs installed.
+Before starting :checkered_flag:, you need to have [Python](https://www.python.org/) and [Libs](https://pypi.org/) installed.
 
-## :checkered_flag: Starting ##
+
+
+### :checkered_flag: Starting ##
 
 ```bash
 # Clone this project
@@ -64,16 +66,29 @@ $ cd resolution-iplocalnetworks
 
 # Install requirements
 $ pip install -r requirements.txt
+```
 
+### :running: Running ###
+
+```bash
 # Run the project
 $ python .\src\main.py parser-nessus
 
 # Run the project debug mode - insert flag "-d"
 $ python .\src\main.py -d parser-nessus
+
+# Run the project diferente source .nessus folder
+$ python .\src\main.py parser-nessus -src 'new/source/'
+
+# Run the project diferente destination changed file
+$ python .\src\main.py parser-nessus -dst 'new/dest/nessus/'
+
+# Run the project all parameters inline
+$ python .\src\main.py -d parser-nessus -src 'new/source/' -dst 'new/dest/nessus/'
 ```
 
 
-Made with :heart: by <a href="https://github.com/almeidajulio" target="_blank">Julio Cesar Almeida</a>
+Made :heart: by <a href="https://github.com/almeidajulio" target="_blank">Julio Cesar Almeida </a> [wmspydev](https://github.com/wmspydev)
 
 &#xa0;
 

@@ -18,6 +18,7 @@
 """
 import os
 import csv
+import json
 import logging
 import argparse
 
@@ -53,6 +54,16 @@ class Finder():
 
 class Nessus():
     def __init__(self, file, dest):
+        # JSON file
+        f = open ('src/config.json', "r")
+        
+        # Reading from file
+        data = json.loads(f.read())
+        if 'network' in data:
+            self.network_scope = data['network']
+        else:
+            self.network_scope = "10.10.10.0/22"
+
         self.iplist = []
         self.file = file
         self.dest = dest
@@ -62,7 +73,7 @@ class Nessus():
     def randomIP(self):
         addr = None
         # network containing all addresses from
-        subnet = IPv4Network("192.168.252.0/22")
+        subnet = IPv4Network(self.network_scope)
 
         # subnet.max_prefixlen contains 32 for IPv4 subnets and 128 for IPv6 subnets
         # subnet.prefixlen is 24 in this case, so we'll generate only 8 random bits
@@ -226,20 +237,34 @@ def engines(args):
     src = args.src
     files_src = [(f) for f in os.listdir(src) if f.endswith(".nessus")]
     dst = args.dst
+    count_files = len(files_src)
 
-    logging.info("[INFO] Starting parsing {} file(s)".format(len(files_src)))
+    if count_files > 0:
+        logging.info("[INFO] Starting parsing {} file(s)".format(count_files))
 
-    for file in files_src:
-        logging.info("[INFO] Parsing File {}".format(file))
-        dest = "{}{}".format(dst, file)
-        file = "{}{}".format(src, file)
-        result = nesses_c(file, dest).parser()
+        for file in files_src:
+            logging.info("[INFO] Parsing File {}".format(file))
+            dest = "{}{}".format(dst, file)
+            file = "{}{}".format(src, file)
+            result = nesses_c(file, dest).parser()
+
+            returns = {}
+            returns['responseCode'] = "SUCCESS"
+            returns['data'] = {
+                "message":
+                "File: {} - {} Hosts in file".format(file, result)
+            }
+
+            # command line response
+            print(returns)
+    else:
+        logging.info("[WARNING] Não foram identificados arquivos '.nessus' no folder 'data/'")
 
         returns = {}
-        returns['responseCode'] = 'SUCCESS'
+        returns['responseCode'] = "WARNING"
         returns['data'] = {
-            'message':
-            'File: {} - {} Hosts in file'.format(file, result)
+            "message":
+            "Não foram identificados arquivos '.nessus' no folder 'data/'"
         }
 
         # command line response
@@ -301,7 +326,8 @@ def debugMode(debug):
     logging.basicConfig(
         filename='./src/logging/logging.log',
         format=log_format,
-        level=level
+        level=level,
+        encoding='utf-8'
     )
     logging.info('[INFO] Running Application')
     logging.getLogger('app')
@@ -312,5 +338,17 @@ if __name__ == "__main__":
     current = os.path.split(os.path.dirname(os.path.abspath(__file__)))[0]
     os.chdir(r'%s' % os.path.normcase(current))
 
-    # TODO: start program modify .nessus
-    main()
+    try:
+        e = open('./src/config.json', 'r')
+
+        # TODO: start program modify .nessus
+        main()
+    
+    except FileNotFoundError as f:
+        returns = {}
+        returns['responseCode'] = 'ERROR'
+        returns['message'] = str(f)
+
+        print(returns)
+    else:
+        e.close()
