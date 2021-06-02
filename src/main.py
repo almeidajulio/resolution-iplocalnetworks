@@ -55,8 +55,8 @@ class Finder():
 class Nessus():
     def __init__(self, file, dest):
         # JSON file
-        f = open ('src/config.json', "r")
-        
+        f = open('src/config.json', "r")
+
         # Reading from file
         data = json.loads(f.read())
         if 'network' in data:
@@ -258,7 +258,8 @@ def engines(args):
             # command line response
             print(returns)
     else:
-        logging.info("[WARNING] Não foram identificados arquivos '.nessus' no folder 'data/'")
+        logging.info(
+            "[WARNING] Não foram identificados arquivos '.nessus' no folder 'data/'")
 
         returns = {}
         returns['responseCode'] = "WARNING"
@@ -323,11 +324,13 @@ def debugMode(debug):
 
     log_format = "%(asctime)s::%(levelname)s::%(name)s::"\
         "%(filename)s::%(lineno)d::%(message)s"
-    logging.basicConfig(
-        filename='./src/logging/logging.log',
+    logging.basicConfig(handlers=[
+        logging.FileHandler(
+            filename='./src/logging/logging.log',
+            encoding='utf-8'
+        )],
         format=log_format,
-        level=level,
-        encoding='utf-8'
+        level=level
     )
     logging.info('[INFO] Running Application')
     logging.getLogger('app')
@@ -343,7 +346,7 @@ if __name__ == "__main__":
 
         # TODO: start program modify .nessus
         main()
-    
+
     except FileNotFoundError as f:
         returns = {}
         returns['responseCode'] = 'ERROR'
