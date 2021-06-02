@@ -97,7 +97,7 @@ class Nessus():
     # TODO: função para fazer a correlação entre nome,hostname,netbios e ip
     def findCSV(self, name, hostname, biosname):
         try:
-            reader = csv.DictReader(open('.\src\hostnames\hostname.csv', 'r'))
+            reader = csv.DictReader(open('src/hostnames/hostname.csv', 'r'))
             self.dict_list = []
             for line in reader:
                 self.dict_list.append(line)
@@ -196,7 +196,7 @@ class Nessus():
                 new_ipaddr = host.find(
                     "HostProperties/tag/[@name='host-ip']").text
 
-                with open('.\src\hostnames\hostname.csv', 'a', newline='') as csvfile:
+                with open('src/hostnames/hostname.csv', 'a', newline='') as csvfile:
                     fieldnames = ['name', 'hostname', 'ip', 'biosname']
                     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
                     if csvfile.tell() == 0:
