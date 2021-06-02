@@ -127,6 +127,7 @@ class Nessus():
     # TODO: função para efetuar nos dados .nessus troca de IPs
     def parser(self):
         hosts = []
+        count = 0
         tree = ET.parse(self.file)
 
         for host in tree.findall('Report/ReportHost'):
@@ -135,7 +136,7 @@ class Nessus():
                 old_ipaddr = ipaddrObj.text
             except Exception as e:
                 logging.error("[ERROR] Filed: {1} - {0}".format(e, "host-ip"))
-         
+
             try:
                 name = host.attrib['name']
                 name = name.lower()
@@ -163,7 +164,8 @@ class Nessus():
                     "HostProperties/tag/[@name='netbios-name']").text
                 netbions_name = netbions_name.lower()
             except Exception as e:
-                logging.error("[ERROR] Filed: {1} - {0}".format(e, "netbios-name"))
+                logging.error(
+                    "[ERROR] Filed: {1} - {0}".format(e, "netbios-name"))
                 netbions_name = None
 
             # try:
@@ -215,6 +217,8 @@ class Nessus():
             })
 
             tree.write(self.dest, encoding='utf-8', xml_declaration=True)
+            count += 1
+        return count
 
 
 def engines(args):
@@ -230,6 +234,16 @@ def engines(args):
         dest = "{}{}".format(dst, file)
         file = "{}{}".format(src, file)
         result = nesses_c(file, dest).parser()
+
+        returns = {}
+        returns['responseCode'] = 'SUCCESS'
+        returns['data'] = {
+            'message':
+            'File: {} - {} Hosts in file'.format(file, result)
+        }
+
+        # command line response
+        print(returns)
 
 
 def main():
@@ -256,11 +270,11 @@ def main():
     PS = subparsers.add_parser(
         'parser-nessus', help='ajustar arquivos com network local via netbios ou hostname')
     PS.add_argument(
-        '-src', action="store", default=".\\data\\",
+        '-src', action="store", default=".\data\/",
         dest='src', help='informe a pasta origem dos arquivos .nessus'
     )
     PS.add_argument(
-        '-dst', action="store", default=".\\data_changed\\",
+        '-dst', action="store", default=".\data_changed\/",
         dest='dst', help='informe a pasta destino dos arquivos modificados'
     )
     PS.set_defaults(func=engines)
