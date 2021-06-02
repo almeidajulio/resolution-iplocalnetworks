@@ -78,6 +78,22 @@ class Nessus():
 
         return addr_str
 
+    # TODO: função para verificar classe (public, private, invalid)
+    def checkIpAddress(self, ip):
+        try:
+            addr = IPv4Address(ip)
+
+            if addr.is_private:
+                response = "private"
+
+            if addr.is_global:
+                response = "global"
+
+        except Exception:
+            response = "invalid"
+
+        return response
+
     # TODO: função para fazer a correlação entre nome,hostname,netbios e ip
     def findCSV(self, name, hostname, biosname):
         try:
@@ -115,45 +131,54 @@ class Nessus():
 
         for host in tree.findall('Report/ReportHost'):
             try:
+                ipaddrObj = host.find("HostProperties/tag/[@name='host-ip']")
+                old_ipaddr = ipaddrObj.text
+            except Exception as e:
+                logging.error("[ERROR] Filed: {1} - {0}".format(e, "host-ip"))
+         
+            try:
                 name = host.attrib['name']
                 name = name.lower()
             except Exception as e:
+                logging.error("[ERROR] Filed: {1} - {0}".format(e, "name"))
                 name = None
-
-            ipaddrObj = host.find("HostProperties/tag/[@name='host-ip']")
-            old_ipaddr = ipaddrObj.text
 
             try:
                 hostname = host.find(
                     "HostProperties/tag/[@name='hostname']").text
                 hostname = hostname.lower()
             except Exception as e:
+                logging.error("[ERROR] Filed: {1} - {0}".format(e, "hostname"))
                 hostname = None
 
-            try:
-                domain = host.find(
-                    "HostProperties/tag/[@name='wmi-domain']").text
-            except Exception as e:
-                domain = None
+            # try:
+            #     domain = host.find(
+            #         "HostProperties/tag/[@name='wmi-domain']").text
+            # except Exception as e:
+            #     logging.error("[ERROR] {} \n {}".format(e, host))
+            #     domain = None
 
             try:
                 netbions_name = host.find(
                     "HostProperties/tag/[@name='netbios-name']").text
                 netbions_name = netbions_name.lower()
             except Exception as e:
+                logging.error("[ERROR] Filed: {1} - {0}".format(e, "netbios-name"))
                 netbions_name = None
 
-            try:
-                macaddr = host.find(
-                    "HostProperties/tag/[@name='mac-address']").text.split("\n")
-            except Exception as e:
-                macaddr = []
+            # try:
+            #     macaddr = host.find(
+            #         "HostProperties/tag/[@name='mac-address']").text.split("\n")
+            # except Exception as e:
+            #     logging.error("[ERROR] {} \n {}".format(e, host))
+            #     macaddr = []
 
-            try:
-                os = host.find(
-                    "HostProperties/tag/[@name='operating-system']").text
-            except Exception as e:
-                os = None
+            # try:
+            #     os = host.find(
+            #         "HostProperties/tag/[@name='operating-system']").text
+            # except Exception as e:
+            #     logging.error("[ERROR] {} \n {}".format(e, host))
+            #     os = None
 
             search_csv = self.findCSV(name, hostname, netbions_name)
             if not search_csv:
@@ -195,10 +220,13 @@ class Nessus():
 def engines(args):
     nesses_c = Nessus
     src = args.src
-    files_src = [f for f in os.listdir(src)]
+    files_src = [(f) for f in os.listdir(src) if f.endswith(".nessus")]
     dst = args.dst
 
+    logging.info("[INFO] Starting parsing {} file(s)".format(len(files_src)))
+
     for file in files_src:
+        logging.info("[INFO] Parsing File {}".format(file))
         dest = "{}{}".format(dst, file)
         file = "{}{}".format(src, file)
         result = nesses_c(file, dest).parser()
@@ -244,7 +272,7 @@ def main():
         args.func(args)
     except Exception as e:
         parser.print_help()
-        logging.error(e)
+        logging.error("[ERROR] ".format(e))
 
 
 def debugMode(debug):
@@ -261,7 +289,7 @@ def debugMode(debug):
         format=log_format,
         level=level
     )
-    logging.info('Running Application')
+    logging.info('[INFO] Running Application')
     logging.getLogger('app')
 
 
