@@ -272,7 +272,7 @@ def main():
         args.func(args)
     except Exception as e:
         parser.print_help()
-        logging.error("[ERROR] ".format(e))
+        logging.error("[ERROR] {}".format(e))
 
 
 def debugMode(debug):
