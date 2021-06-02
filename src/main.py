@@ -53,7 +53,7 @@ class Finder():
 
 
 class Nessus():
-    def __init__(self, file, dest):
+    def __init__(self, file, dest, csv):
         # JSON file
         f = open('src/config.json', "r")
 
@@ -67,6 +67,7 @@ class Nessus():
         self.iplist = []
         self.file = file
         self.dest = dest
+        self.csv = csv
         self.finder = Finder()
 
     # TODO: função para randomizar um IP dentro de um scopo de rede
@@ -108,7 +109,7 @@ class Nessus():
     # TODO: função para fazer a correlação entre nome,hostname,netbios e ip
     def findCSV(self, name, hostname, biosname):
         try:
-            reader = csv.DictReader(open('src/hostnames/hostname.csv', 'r'))
+            reader = csv.DictReader(open(self.csv, 'r'))
             self.dict_list = []
             for line in reader:
                 self.dict_list.append(line)
@@ -207,7 +208,7 @@ class Nessus():
                 new_ipaddr = host.find(
                     "HostProperties/tag/[@name='host-ip']").text
 
-                with open('src/hostnames/hostname.csv', 'a', newline='') as csvfile:
+                with open(self.csv, 'a', newline='') as csvfile:
                     fieldnames = ['name', 'hostname', 'ip', 'biosname']
                     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
                     if csvfile.tell() == 0:
@@ -229,6 +230,7 @@ class Nessus():
 
             tree.write(self.dest, encoding='utf-8', xml_declaration=True)
             count += 1
+            
         return count
 
 
@@ -237,6 +239,7 @@ def engines(args):
     src = args.src
     files_src = [(f) for f in os.listdir(src) if f.endswith(".nessus")]
     dst = args.dst
+    csv = args.csv
     count_files = len(files_src)
 
     if count_files > 0:
@@ -246,7 +249,7 @@ def engines(args):
             logging.info("[INFO] Parsing File {}".format(file))
             dest = "{}{}".format(dst, file)
             file = "{}{}".format(src, file)
-            result = nesses_c(file, dest).parser()
+            result = nesses_c(file, dest, csv).parser()
 
             returns = {}
             returns['responseCode'] = "SUCCESS"
@@ -302,6 +305,10 @@ def main():
     PS.add_argument(
         '-dst', action="store", default="data_changed/",
         dest='dst', help='informe a pasta destino dos arquivos modificados'
+    )
+    PS.add_argument(
+        '-csv', action="store", default="src/hostnames/hostname.csv",
+        dest='csv', help='informe o local do arquivo base ex: "src\ips.csv"'
     )
     PS.set_defaults(func=engines)
 
