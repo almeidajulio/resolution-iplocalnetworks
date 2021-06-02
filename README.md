@@ -7,7 +7,7 @@
 <h1 align="center">Resolution Iplocalnetworks</h1>
 
 <p align="center">
-  <img alt="Github top language" src="https://img.shields.io/github/languages/top/almiedajulio/resolution-iplocalnetworks?color=56BEB8">
+  <img alt="Github top language" src="https://img.shields.io/github/languages/top/almeidajulio/resolution-iplocalnetworks?color=56BEB8">
 
   <img alt="Github language count" src="https://img.shields.io/github/languages/count/almeidajulio/resolution-iplocalnetworks?color=56BEB8">
 
