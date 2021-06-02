@@ -270,11 +270,11 @@ def main():
     PS = subparsers.add_parser(
         'parser-nessus', help='ajustar arquivos com network local via netbios ou hostname')
     PS.add_argument(
-        '-src', action="store", default=".\data\/",
+        '-src', action="store", default="data/",
         dest='src', help='informe a pasta origem dos arquivos .nessus'
     )
     PS.add_argument(
-        '-dst', action="store", default=".\data_changed\/",
+        '-dst', action="store", default="data_changed/",
         dest='dst', help='informe a pasta destino dos arquivos modificados'
     )
     PS.set_defaults(func=engines)
