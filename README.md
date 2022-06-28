@@ -1,24 +1,19 @@
-# GAT IplocalNetworks
-<img align="right" height="70" src="https://www.gat.digital/wp-content/uploads/2021/05/logo-gat-padrao-negativo.png">
-
-> Additional information or tagline
-<div align="center" id="top"> 
-  <img src="./.github/app.gif" alt="Resolution Iplocalnetworks" />
-
-  &#xa0;
-</div>
-
-<h1 align="center">Resolution Iplocalnetworks</h1>
-
-<p align="center">
+# GAT Resolution Iplocalnetworks
+<a href src="https://gat.digital" target="_blank"><img align="right" height="70" src="https://www.gat.digital/wp-content/uploads/2021/05/logo-gat-padrao-negativo.png"></a>
+<p align="left">
   <img alt="Github top language" src="https://img.shields.io/github/languages/top/almeidajulio/resolution-iplocalnetworks?color=56BEB8">
 
   <img alt="Github language count" src="https://img.shields.io/github/languages/count/almeidajulio/resolution-iplocalnetworks?color=56BEB8">
 
   <img alt="Repository size" src="https://img.shields.io/github/repo-size/almeidajulio/resolution-iplocalnetworks?color=56BEB8">
-
 </p>
+<br>
+<br>
+<div align="center" id="top"> 
+  <img src="./.github/app.gif" alt="Resolution Iplocalnetworks" />
 
+  &#xa0;
+</div>
 
 #### Directory Structure 
 <br>
