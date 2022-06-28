@@ -1,3 +1,7 @@
+# GAT IplocalNetworks
+<img align="right" height="70" src="https://www.gat.digital/wp-content/uploads/2021/05/logo-gat-padrao-negativo.png">
+
+> Additional information or tagline
 <div align="center" id="top"> 
   <img src="./.github/app.gif" alt="Resolution Iplocalnetworks" />
 
